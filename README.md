@@ -50,3 +50,55 @@ npm run dev             # أو npm start
 
 - `.env` غير موجود في git (`.gitignore`) — استخدم `.env.example` كنموذج.
 - الروابط الثابتة زي `/available` و `/unavailable` و `/name/:name` مكتوبة قبل `/:id` في الراوتر حتى ما تتعارض معه.
+
+
+
+
+## اختبار عبر Postman
+
+### تسجيل مستخدم جديد
+```
+POST http://localhost:5000/api/auth/register
+```
+Body → raw → JSON:
+```json
+{
+  "username": "ahmed",
+  "email": "ahmed@example.com",
+  "password": "123456"
+}
+```
+
+### تسجيل الدخول
+```
+POST http://localhost:5000/api/auth/login
+```
+```json
+{
+  "email": "ahmed@example.com",
+  "password": "123456"
+}
+```
+⚠️ Postman بيحفظ الكوكي تلقائياً بعد الـ login — هاي الكوكي هي يلي بتخلي الطلبات الجاية "متذكرة" إنك مسجل دخول.
+
+### المستخدم الحالي (لازم تكون عملت login قبل)
+```
+GET http://localhost:5000/api/auth/me
+```
+
+### Route محمي (تجربة)
+```
+GET http://localhost:5000/api/auth/protected
+```
+لو مسجل دخول → رسالة ترحيب. لو لأ → `401`.
+
+### تسجيل الخروج
+```
+POST http://localhost:5000/api/auth/logout
+```
+
+## ملاحظات
+
+- الباسورد دايماً مشفر بـ bcrypt قبل ما ينخزن — أبداً نص صريح.
+- مسارات المنتجات (`/api/admin/products/...`) يلي عملناهم سابقاً ضلوا شغالين متل ما هم، ما تأثروا.
+- هاد النظام يستخدم **Sessions + Cookies** (مو JWT) — يعني الحالة محفوظة عالسيرفر.
