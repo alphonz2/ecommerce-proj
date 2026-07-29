@@ -1,22 +1,22 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import bcrypt from 'bcrypt';
+import User from '../models/User.js';
 
 // Use "email" instead of the default "username" field
 passport.use(
   new LocalStrategy(
-    { usernameField: "email", passwordField: "password" },
+    { usernameField: 'email', passwordField: 'password' },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-          return done(null, false, { message: "Incorrect email or password" });
+          return done(null, false, { message: 'Incorrect email or password' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-          return done(null, false, { message: "Incorrect email or password" });
+          return done(null, false, { message: 'Incorrect email or password' });
         }
 
         return done(null, user);
@@ -42,4 +42,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-module.exports = passport;
+export default passport;

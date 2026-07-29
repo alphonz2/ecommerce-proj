@@ -1,7 +1,8 @@
 node_module/
 .env
 
-
+.eslintrc.json
+.prettierrc
 # Logs
 logs
 *.log

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema(
   {
@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true, // always stored lowercase
     },
     description: {
       type: String,
@@ -14,10 +15,14 @@ const productSchema = new mongoose.Schema(
     brand: {
       type: String,
       required: true,
+      trim: true,
+      lowercase: true,
     },
     category: {
       type: String,
       required: true,
+      trim: true,
+      lowercase: true,
     },
     price: {
       type: Number,
@@ -36,11 +41,14 @@ const productSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["active", "inactive", "draft"],
-      default: "active",
+      enum: ['active', 'inactive', 'draft'],
+      default: 'active',
+      lowercase: true, // so "Active" / "ACTIVE" still match the enum values above
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
+
+export default Product;
