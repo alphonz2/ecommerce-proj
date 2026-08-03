@@ -27,19 +27,8 @@ passport.use(
   )
 );
 
-// Stores only the user id in the session
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-// Fetches the full user from the id stored in the session
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
-});
+// No serializeUser/deserializeUser here anymore — JWT is stateless,
+// there is no session to store the user in. The LocalStrategy above
+// is only used once, at login, to verify email+password.
 
 export default passport;
